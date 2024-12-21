@@ -25,21 +25,23 @@ def canMove(row,col):
     return False
 
 def dfs(row,col):
+   
     
     if dp[row][col] != - 1 :
         return dp[row][col]
     
+    
     dp[row][col] = 1
+       
     
     for dir in range(4):
         nextRow = row + dRow[dir]
         nextCol = col + dCol[dir]
         if 0<= nextRow < n and 0 <= nextCol < n :
             if grid[nextRow][nextCol] > grid[row][col] :
-                 dp[row][col] = max( dp[row][col], dfs(nextRow,nextCol) + 1) 
-    
-
-    return  dp[row][col]
+                dp[row][col] = max(dp[row][col], dfs(nextRow,nextCol) + 1) 
+     
+    return dp[row][col]
 ans = []
 for i in range(n):
     for j in range(n):
