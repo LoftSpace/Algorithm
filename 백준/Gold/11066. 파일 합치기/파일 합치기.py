@@ -1,33 +1,29 @@
 import sys
+
 input = sys.stdin.readline
-#variables
+T = int(input())
 
-t =int(input())
-sum=0
-for _ in range(t):
-    k=int(input())
-    K=k
-    files=list(map(int,input().split()))
-    sums=[files[0]]
+for test in range(T):
 
-    for i in range(1,len(files)):
-        sums.append(sums[i-1]+files[i])
+    N = int(input())
+    arr = list(map(int,input().split()))
+    dp = [[1000000000] * (N+1) for _ in range(N+1)]
 
-    dp=[[0]*k for i in range(k)]
-    for i in range(len(files)-1):
-        dp[i][i+1]=files[i]+files[i+1]
-    for j in range(2,len(files)):
-        i=0
-        while i+j <len(files):
-            for k in range(i,i+j):
-                if i==0:
-                    sum=sums[i+j]
-                else:
-                    sum= sums[i+j]-sums[i-1]
-                if dp[i][i + j] == 0:
-                    dp[i][i + j] = dp[i][k] + dp[k + 1][i + j] + sum
-                else:
-                    dp[i][i + j] = min(dp[i][i + j], dp[i][k] + dp[k + 1][i + j] + sum)
+    sumArr = [0] * (N+1)
+
+    for i in range(1,N + 1):
+        sumArr[i] = sumArr[i-1] + arr[i-1]
+
+    for i in range(1, N+ 1) :
+        dp[i][i] = 0
+
+
+
+    for n in range(1,N):
+        for i in range(1, N-n + 1):
+            j = i + n
+            for k in range(i,j):
+                dp[i][j] = min(dp[i][j], dp[i][k] + dp[k+1][j] + sumArr[j] - sumArr[i - 1])
                 
-            i+=1   
-    print(dp[0][-1])
+
+    print(dp[1][N])
