@@ -2,7 +2,6 @@ import sys
 
 input = sys.stdin.readline
 
-T = int(input())
 
 
 def union(a,b):
@@ -11,28 +10,28 @@ def union(a,b):
     if aRoot == bRoot :
         return
     else :
-        network[bRoot] = aRoot
-        people[aRoot] += people[bRoot]
+        parent[bRoot] = aRoot
+        size[aRoot] += size[bRoot]
 
 def find(a):
-    if network[a] != a:
-        network[a] = find(network[a])
-    return network[a]
+    if parent[a] != a :
+        parent[a] = find(parent[a])
+    return parent[a]
 
-
-for t in range(T):
+T = int(input())
+for t in range(T) :
     F = int(input())
-    network = dict()
-    people = dict()
+    parent = dict()
+    size = dict()
 
-    for i in range(F):
-        f1 , f2 = map(str,input().split())
+    for i in range(F) :
+        a,b = map(str,input().split())
+        if a not in parent :
+            parent[a] = a
+            size[a] = 1
+        if b not in parent :
+            parent[b] = b
+            size[b] = 1
+        union(a,b)
         
-        if f1 not in network :
-            network[f1] = f1
-            people[f1] = 1
-        if f2 not in network:
-            network[f2] = f2
-            people[f2] = 1
-        union(f1,f2)
-        print(people[find(f1)])
+        print(size[find(a)])
