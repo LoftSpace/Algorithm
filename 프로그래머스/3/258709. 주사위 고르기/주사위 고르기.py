@@ -1,45 +1,36 @@
 from itertools import combinations, product
+from bisect import bisect_left
 def solution(dice):
-    N = len(dice)
-    dice_idx = list(range(0,len(dice)))
-    nCr = combinations(range(N), N // 2)
-    wins = []
-    for caseA in nCr :
-        caseB = [i for i in range(N) if i not in caseA]
-        
-        A, B = [], []
-        for order_production in product(range(6),repeat = N//2) :
-            A.append(sum(dice[i][j] for i, j in zip(caseA,order_production)))
-            B.append(sum(dice[i][j] for i,j in zip(caseB, order_production)))
-            
-        B.sort()
-      
-        count = 0
-        for num in A :
-            left = 0
-            right = len(B) - 1
-            while left <= right :
-                mid = (left + right) // 2
-                if num > B[mid] :
-                    left = mid + 1
-                elif num <= B[mid] :
-                    right = mid - 1
-                
-            count += left
-        
-        case = list(caseA)
-        case.append(count)
-        wins.append(case)
-    
     answer = []
-    Max = 0
-    print(wins)
-    for i in wins :
-        if i[-1] > Max :
-            Max = i[-1]
-            answer = i
-    for i in range(len(answer)-1) :
-        answer[i] += 1
-    print(answer[:-1])
     
-    return answer[:-1]
+    N = len(dice)
+    total_games = 6 ** N
+    a_dices_index = combinations(range(N),N//2)
+ 
+    for a_dice_index in a_dices_index :
+        b_dice_index = [i for i in range(N) if i not in a_dice_index]
+        A = []
+        B = []
+        for each_dice_element_index_set in product(range(6),repeat = N // 2):
+            sum = 0
+            for dice_num,each_dice_element_index in enumerate(each_dice_element_index_set):
+                sum += dice[a_dice_index[dice_num]][each_dice_element_index]
+            A.append(sum)
+        
+        for each_dice_element_index_set in product(range(6),repeat = N // 2):
+            sum = 0
+            for dice_num,each_dice_element_index in enumerate(each_dice_element_index_set):
+                sum += dice[b_dice_index[dice_num]][each_dice_element_index]
+            B.append(sum)
+        B.sort()
+        wins = 0
+        for num in A :
+            wins += bisect_left(B,num)
+        answer.append([wins,a_dice_index])
+    answer.sort(key = lambda x : (x[0]),reverse = True)
+    print(answer)
+    answer = answer[0][1]
+    ans = list(answer)
+    for i in range(len(answer)):
+        ans[i] += 1
+    return ans
