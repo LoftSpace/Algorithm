@@ -1,12 +1,12 @@
 def solution(n, s):
     if s < n :
         return [-1]
-    elements = [0] * n
+    
     a = s // n
-    for i in range(n):
-        elements[i] = a
+    elements = [a] * n
     remain = s % n
     i = 0
+    
     while remain > 0 :
         elements[-1-i] += 1
         i += 1
