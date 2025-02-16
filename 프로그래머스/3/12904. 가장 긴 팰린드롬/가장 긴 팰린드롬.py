@@ -1,19 +1,27 @@
-def solution(s):
-    def find(left,right,length):     
-        while left >= 0 and right < len(s) and s[left] == s[right]:
-            left -= 1
-            right += 1
-            length += 2
-        return length
-    a = 0
-   
-    answer = 1
-    if len(s) < 2 or s == s[::-1]:
-        return len(s)
-    
-    for i in range(1,len(s)-1):
-        answer = max(find(i,i+1,0),answer,find(i-1,i+1,1))
+def solution(S):
+    s = []
+    for i in S :
+        s.append('#')
+        s.append(i)
+    s.append('#')
+    r = 0
+    p = 0
+    dp = [0] * (len(s))
+    for i in range(len(s)):
         
-    answer = max(answer,find(0,1,0))
-
+        if i <= r and i + dp[2*p-i] <= r:
+            dp[i] = dp[2*p-i]
+        elif i <= r and i + dp[2*p-i] > r :
+            dp[i] = r - i
+        else :
+            dp[i] = 0
+        
+        while i - dp[i] - 1 >= 0 and i + dp[i] + 1 < len(s) and s[i + dp[i] + 1] == s[i - dp[i] - 1] :
+            dp[i] += 1
+        
+        if i + dp[i] > r :
+            r = i + dp[i]
+            p = i
+    
+    answer = max(dp)
     return answer
