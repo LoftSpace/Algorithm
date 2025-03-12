@@ -1,22 +1,20 @@
-import sys
+n = int(input())
 
-input = sys.stdin.readline
+wine = []
 
-N = int(input())
-arr = []
-for i in range(N):
-    arr.append(int(input()))
+for i in range(n):
+    wine.append(int(input()))
 
-dp = [[0] * 2 for _ in range(N)]
-if N == 1 :
-    print(arr[0])
-    exit(0)
-dp[0][0] = 0
-dp[0][1] = arr[0]
-dp[1][1] = arr[0] + arr[1]
-dp[1][0] = arr[0]
+d = [0]*n
 
-for i in range(2,N):
-    dp[i][0] = max(dp[i-1][1],dp[i-1][0])
-    dp[i][1] = max(dp[i-2][0] + arr[i-1] + arr[i],dp[i-2][1] + arr[i])
-print(max(dp[N-1]))
+d[0] = wine[0]
+if n > 1:
+    d[1] = wine[0]+wine[1]
+
+if n > 2:
+    d[2] = max(wine[2]+wine[1], wine[2]+wine[0], d[1])
+
+for i in range(3, n):
+    d[i] = max(d[i-1], d[i-3]+wine[i-1]+wine[i], d[i-2]+wine[i])
+
+print(d[n-1])
