@@ -1,12 +1,16 @@
 import sys
-input= sys.stdin.readline
+input = sys.stdin.readline
 
-n=int(input())
-l=list(map(int,input().split()))
+N = int(input())
+arr = list(map(int,input().split()))
+answer = 0
+dp = [0] * len(arr)
+dp[0] = arr[0]
+for i in range(1,len(arr)):
+    if dp[i-1] < 0 :
+        dp[i] = arr[i]
+    else :
 
-dp=[0]*n
+        dp[i] = dp[i-1] + arr[i]
 
-dp[0]=l[0]
-for i in range(1,n):
-    dp[i]=max(l[i],dp[i-1]+l[i])
 print(max(dp))
