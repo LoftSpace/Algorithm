@@ -2,35 +2,34 @@ import sys
 
 input = sys.stdin.readline
 
-ans = []
-T = int(input())
-T_list = list(map(int,input().split()))
+N = int(input())
+v = list(map(int,input().split()))
+M = int(input())
+m = list(map(int,input().split()))
+MAX_RANGE = N * 500 + 1
+dp = [[False] * MAX_RANGE for _ in range(N)]
+dp[0][0] = True
+dp[0][v[0]] = True
 
-O = int(input())
-O_list = list(map(int,input().split()))
-
-dp = [[False] * (40001) for _ in range(T + 1)]
-
-for i in range(T + 1):
-    dp[i][0] = True
-for i in range(T) :
-    dp[i+1][T_list[i]] = True
-for i in range(1, T + 1) :
-    for j in range(1,40001) :
-        currentWeight = T_list[i - 1]
+# 각 추에 대해
+for i in range(1,N):
+    for j in range(MAX_RANGE):
         if dp[i-1][j] :
             dp[i][j] = True
-
-        
-        if dp[i-1][abs(j-currentWeight)] :
-            dp[i][j] = True
-
-        if j + currentWeight <= 40000 :
-            if dp[i-1][j + currentWeight] :
+            continue
+        elif dp[i-1][abs(j-v[i])]:
                 dp[i][j] = True
+                continue
+        if j + v[i] < MAX_RANGE:
+                dp[i][j] = dp[i-1][j + v[i]]
 
-for i in O_list :
-    if dp[T][i] :
+ans = []
+#print(dp[3][8])
+#print(dp[1][2])
+for i in m :
+    if i > MAX_RANGE : 
+        ans.append('N')
+    elif dp[N-1][i] :
         ans.append('Y')
     else :
         ans.append('N')
@@ -38,4 +37,5 @@ for i in O_list :
 for i in range(len(ans) - 1) :
     print(ans[i],end = '')
     print(' ',end = '')
+
 print(ans[-1])
