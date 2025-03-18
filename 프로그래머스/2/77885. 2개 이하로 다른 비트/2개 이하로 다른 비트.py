@@ -1,19 +1,32 @@
 def solution(numbers):
+    def int_to_bin(number):
+        return bin(number)[2:]
+    def binary_to_int(binary):
+        count = 0
+        Sum=0
+        for i in range(len(binary)-1,-1,-1):
+            Sum += (2 ** count) * int(binary[i])
+            count += 1
+        return Sum
     
-    answer = []
+    answer= []
     for number in numbers :
-        a = list('0' + bin(number)[2:])
-        
-            
-        
-        for i in range(len(a)-1,-1,-1):
-            if a[i] == '0' :
-                a[i] = '1'
-                break
-        if number % 2 == 1 :
-            a[i + 1] = '0'
-        
-        num = ''.join(a)
-        answer.append(int(num,2))
+        binary = list(int_to_bin(number))
+       # print(binary)
+        if '0' not in binary :
+            binary = ['1','0'] + binary[1:]
+            #print(binary)
+            answer.append(binary_to_int(binary))
+        elif binary[-1] == '0':
+            answer.append(number + 1)
+        else :
+            for i in range(len(binary)-1,-1,-1):
+                if binary[i] == '0' :
+                    binary[i] = '1'
+                    binary[i + 1] = '0'
+                    break
+            #print(binary)
+            answer.append(binary_to_int(binary))
+    
     
     return answer
