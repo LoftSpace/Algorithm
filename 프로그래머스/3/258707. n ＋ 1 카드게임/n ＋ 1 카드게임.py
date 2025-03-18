@@ -33,7 +33,7 @@ def solution(coin, cards):
         return False
                 
     #코인을 다 쓰거나 더이상 뽑을 카드가 없다면 종료
-    while coin >= 0 and cards :
+    while  cards :
         past_cards.add(cards.popleft())
         past_cards.add(cards.popleft())
         #내 카드 중에서 짝을 이루면
