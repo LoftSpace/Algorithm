@@ -24,4 +24,3 @@ for lecture in lectures :
         heapq.heappush(queue,lecture[1])
 
 print(len(queue))
-
