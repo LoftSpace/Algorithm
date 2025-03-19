@@ -43,4 +43,4 @@ def solution(temperature, t1, t2, a, b, onboard):
   
     answer = min(dp[-1])
 
-    return answer
+    return answer   
