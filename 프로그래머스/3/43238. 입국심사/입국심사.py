@@ -1,14 +1,19 @@
 def solution(n, times):
+    MAX = max(times) * n
+    
     left = 0
-    right = max(times) * n
+    right = MAX
+    #left most
     while left <= right :
         mid = (left + right) // 2
-        people = 0
+        #print(left,mid,right)
+        count = 0
         for i in times :
-            people += (mid // i)
-        if people < n :
+            count += (mid // i)
+        if count < n :
             left = mid + 1
+        elif count > n :
+            right = mid - 1
         else :
             right = mid - 1
-    answer = left
-    return answer
+    return left
