@@ -1,16 +1,17 @@
 -- 코드를 입력하세요
-SELECT 
-    C.CAR_ID,
-    C.CAR_TYPE,
-    round(30 * C.DAILY_FEE * (1 - P.DISCOUNT_RATE / 100), 0) AS FEE
-FROM CAR_RENTAL_COMPANY_CAR C
-INNER JOIN CAR_RENTAL_COMPANY_DISCOUNT_PLAN P ON C.CAR_TYPE = P.CAR_TYPE
-WHERE (C.CAR_TYPE = '세단' OR C.CAR_TYPE = 'SUV')
-    AND P.DURATION_TYPE like '30일%'
-    AND CAR_ID NOT IN (
-        SELECT CAR_ID
-        FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
-        WHERE END_DATE >= '2022-11-01' AND START_DATE <= '2022-11-30'
-    )
-    AND round(30 * C.DAILY_FEE * (1 - P.DISCOUNT_RATE / 100), 0) BETWEEN 500000 AND 2000000
-ORDER BY FEE DESC, CAR_TYPE ASC, CAR_ID DESC
+select car_id,P.car_type,round(daily_fee * 30 * (100 - discount_rate) * 0.01,0) as FEE
+from CAR_RENTAL_COMPANY_DISCOUNT_PLAN P
+Join 
+    (select car_id, daily_fee,car_type
+     from CAR_RENTAL_COMPANY_CAR C
+     where C.car_id not in 
+            (SELECT car_id
+            from CAR_RENTAL_COMPANY_RENTAL_HISTORY H
+            where H.START_DATE <= '2022-11-30' and H.END_DATE >= '2022-11-01')
+            and 
+            (C.car_type = '세단' or C.car_type = 'SUV')
+ ) as T2 on 
+ T2.car_type = P.car_type 
+ where P.duration_type = '30일 이상' 
+ Having FEE >= 500000 and FEE < 2000000
+ order by FEE desc, P.car_type asc,car_id desc
